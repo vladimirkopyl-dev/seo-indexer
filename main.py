@@ -42,3 +42,4 @@ async def create_checkout():
     )
     from fastapi.responses import RedirectResponse
     return RedirectResponse(url=session.url, status_code=303)
+    
