@@ -20,10 +20,10 @@ async def home():
         <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 100px; background-color: #f4f7f9;">
             <div style="max-width: 500px; margin: auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 <h1 style="color: #333;">🚀 SEO Turbo Indexer</h1>
-                <p style="color: #666; font-size: 18px;">Пришвидшіть індексацію вашого сайту в Google за лічені години.</p>
+                <p style="color: #666; font-size: 18px;">Fast-track your Google visibility.</p>
                 <div style="margin-top: 30px;">
                     <a href="/buy" style="background-color: #6772E5; color: white; padding: 18px 35px; text-decoration: none; border-radius: 5px; font-size: 20px; font-weight: bold; display: inline-block; transition: background 0.3s;">
-                        Активувати за $10/міс
+                        Activate for $10/month only
                     </a>
                 </div>
                 <p style="margin-top: 20px; font-size: 12px; color: #999;">Безпечна оплата через Stripe</p>
