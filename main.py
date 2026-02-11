@@ -6,7 +6,7 @@
         ("CREDITS FOR RESULTS", "fas fa-shield-alt", "Pay only for pages that actually get indexed. No wasted credits."),
         ("FLEXIBLE PAYMENT", "fas fa-credit-card", "Multiple secure payment methods to suit your preferences."),
         ("SIMPLE API", "fas fa-code", "Easily integrate indexing into your workflow with our SEO Turbo API.")
-    ] # Переконайтеся, що тут є закриваюча дужка ]
+    ]
 
     # 2. FAQ Section
     faq_list = [
@@ -14,4 +14,4 @@
         ("How long does indexing take?", "Most pages (70%) are indexed within 24 hours, but we monitor for up to 10 days before issuing refunds."),
         ("Is it safe for my website?", "Yes, SEO Turbo Indexer uses safe, multi-step pipelines that are fully compliant with search engine policies."),
         ("What happens if a URL is not indexed?", "Your credit is automatically returned to your balance after 10 days if indexing is not detected by our system.")
-    ] # Переконайтеся, що тут є закриваюча дужка ]
+    ]
