@@ -4,82 +4,26 @@ import stripe
 import os
 
 app = FastAPI()
+
+# ВАЖЛИВО: Переконайтеся, що ви додали STRIPE_SECRET_KEY у Variables на Railway
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-# Спільний стиль для текстових сторінок
-TEXT_PAGE_STYLE = """
+# Спільний стиль для всіх сторінок
+STYLE = """
 <style>
-    body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: auto; padding: 40px 20px; background: #f4f7f9; }
-    .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    h1 { color: #111; }
-    a { color: #6772E5; text-decoration: none; }
-    .footer { margin-top: 40px; text-align: center; font-size: 0.9em; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: auto; padding: 40px 20px; background: #f4f7f9; }
+    .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+    h1 { color: #111; font-size: 2.5em; margin-bottom: 10px; }
+    .btn { background: #6772E5; color: white; padding: 16px 32px; border-radius: 6px; font-weight: bold; text-decoration: none; display: inline-block; margin: 20px 0; transition: background 0.2s; }
+    .btn:hover { background: #5469d4; }
+    .footer { margin-top: 50px; text-align: center; font-size: 0.85em; color: #666; }
+    .footer a { color: #6772E5; text-decoration: none; margin: 0 10px; }
+    textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-family: monospace; }
 </style>
 """
 
+# 1. ГОЛОВНА СТОРІНКА
 @app.get("/", response_class=HTMLResponse)
 async def home():
     return f"""
     <html>
-        <head>
-            <title>SEO Turbo Indexer</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            {TEXT_PAGE_STYLE}
-        </head>
-        <body style="text-align: center;">
-            <div class="container" style="max-width: 500px; margin: auto;">
-                <h1>🚀 SEO Turbo Indexer</h1>
-                <p>Get your pages indexed by Google within 24 hours.</p>
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-                <p style="font-size: 1.2em; font-weight: bold;">Only $10 / month</p>
-                <a href="/buy" style="background: #6772E5; color: white; padding: 15px 25px; border-radius: 5px; font-weight: bold; display: inline-block;">Get Instant Access</a>
-            </div>
-            <div class="footer">
-                <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a>
-            </div>
-        </body>
-    </html>
-    """
-
-@app.get("/privacy", response_class=HTMLResponse)
-async def privacy():
-    return f"""
-    <html>
-        <head><title>Privacy Policy - SEO Turbo Indexer</title>{TEXT_PAGE_STYLE}</head>
-        <body>
-            <div class="container">
-                <h1>Privacy Policy</h1>
-                <p>Last updated: February 11, 2026</p>
-                <p>At SEO Turbo Indexer, we respect your privacy. We only collect information necessary to provide our services:</p>
-                <ul>
-                    <li><strong>Email:</strong> Collected via Stripe to manage your access.</li>
-                    <li><strong>URLs:</strong> The links you submit are used solely for indexing purposes.</li>
-                </ul>
-                <p>We do not sell your data to third parties. Payments are processed securely by Stripe.</p>
-                <a href="/">← Back to Home</a>
-            </div>
-        </body>
-    </html>
-    """
-
-@app.get("/terms", response_class=HTMLResponse)
-async def terms():
-    return f"""
-    <html>
-        <head><title>Terms of Service - SEO Turbo Indexer</title>{TEXT_PAGE_STYLE}</head>
-        <body>
-            <div class="container">
-                <h1>Terms of Service</h1>
-                <p>By using SEO Turbo Indexer, you agree to the following:</p>
-                <ul>
-                    <li>The service is provided "as is". We aim for 24h indexing but cannot guarantee Google's internal algorithms.</li>
-                    <li>The $10 fee is for a one-time access/monthly subscription as described.</li>
-                    <li>Users are responsible for the URLs they submit.</li>
-                </ul>
-                <a href="/">← Back to Home</a>
-            </div>
-        </body>
-    </html>
-    """
-
-# ... (інші функції /buy, /dashboard та /send-links залишаються такими ж)
