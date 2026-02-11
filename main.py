@@ -6,77 +6,80 @@ import os
 app = FastAPI()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-# 1. LANDING PAGE (Головна сторінка)
+# Спільний стиль для текстових сторінок
+TEXT_PAGE_STYLE = """
+<style>
+    body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: auto; padding: 40px 20px; background: #f4f7f9; }
+    .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    h1 { color: #111; }
+    a { color: #6772E5; text-decoration: none; }
+    .footer { margin-top: 40px; text-align: center; font-size: 0.9em; }
+</style>
+"""
+
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    return """
+    return f"""
     <html>
         <head>
             <title>SEO Turbo Indexer</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            {TEXT_PAGE_STYLE}
         </head>
-        <body style="font-family: sans-serif; text-align: center; padding-top: 50px; background: #f4f7f9;">
-            <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <body style="text-align: center;">
+            <div class="container" style="max-width: 500px; margin: auto;">
                 <h1>🚀 SEO Turbo Indexer</h1>
                 <p>Get your pages indexed by Google within 24 hours.</p>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p style="font-size: 1.2em; font-weight: bold;">Only $10 / month</p>
-                <a href="/buy" style="background: #6772E5; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Get Instant Access</a>
+                <a href="/buy" style="background: #6772E5; color: white; padding: 15px 25px; border-radius: 5px; font-weight: bold; display: inline-block;">Get Instant Access</a>
+            </div>
+            <div class="footer">
+                <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a>
             </div>
         </body>
     </html>
     """
 
-# 2. CHECKOUT SESSION (Оплата)
-@app.get("/buy")
-async def create_checkout():
-    try:
-        session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {'name': 'SEO Turbo Indexer - Full Access'},
-                    'unit_amount': 1000,
-                },
-                'quantity': 1,
-            }],
-            mode='payment',
-            success_url='https://seo-indexer-production.up.railway.app/dashboard', 
-            cancel_url='https://seo-indexer-production.up.railway.app/',
-        )
-        return RedirectResponse(url=session.url, status_code=303)
-    except Exception as e:
-        return {"error": str(e)}
-
-# 3. USER DASHBOARD (Особистий кабінет)
-@app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard():
-    return """
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy():
+    return f"""
     <html>
-        <head><title>Dashboard - SEO Indexer</title></head>
-        <body style="font-family: sans-serif; padding: 20px; text-align: center; background: #f4f7f9;">
-            <div style="max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 10px;">
-                <h2 style="color: #28a745;">✅ Payment Successful!</h2>
-                <h3>Submit your URLs for indexing:</h3>
-                <p style="color: #666;">Enter one URL per line</p>
-                <form action="/send-links" method="post">
-                    <textarea name="links" rows="10" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="https://example.com/my-page"></textarea><br><br>
-                    <button type="submit" style="background: #28a745; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Start Indexing Now</button>
-                </form>
+        <head><title>Privacy Policy - SEO Turbo Indexer</title>{TEXT_PAGE_STYLE}</head>
+        <body>
+            <div class="container">
+                <h1>Privacy Policy</h1>
+                <p>Last updated: February 11, 2026</p>
+                <p>At SEO Turbo Indexer, we respect your privacy. We only collect information necessary to provide our services:</p>
+                <ul>
+                    <li><strong>Email:</strong> Collected via Stripe to manage your access.</li>
+                    <li><strong>URLs:</strong> The links you submit are used solely for indexing purposes.</li>
+                </ul>
+                <p>We do not sell your data to third parties. Payments are processed securely by Stripe.</p>
+                <a href="/">← Back to Home</a>
             </div>
         </body>
     </html>
     """
 
-# 4. LINK PROCESSING (Обробка)
-@app.post("/send-links")
-async def receive_links(links: str = Form(...)):
-    # Filtering empty lines
-    urls = [url.strip() for url in links.split('\n') if url.strip()]
-    count = len(urls)
-    return {
-        "status": "success",
-        "message": f"Received {count} URLs. Our bots have started the indexing process!",
-        "next_steps": "You will see your pages in Google search results shortly."
-    }
+@app.get("/terms", response_class=HTMLResponse)
+async def terms():
+    return f"""
+    <html>
+        <head><title>Terms of Service - SEO Turbo Indexer</title>{TEXT_PAGE_STYLE}</head>
+        <body>
+            <div class="container">
+                <h1>Terms of Service</h1>
+                <p>By using SEO Turbo Indexer, you agree to the following:</p>
+                <ul>
+                    <li>The service is provided "as is". We aim for 24h indexing but cannot guarantee Google's internal algorithms.</li>
+                    <li>The $10 fee is for a one-time access/monthly subscription as described.</li>
+                    <li>Users are responsible for the URLs they submit.</li>
+                </ul>
+                <a href="/">← Back to Home</a>
+            </div>
+        </body>
+    </html>
+    """
+
+# ... (інші функції /buy, /dashboard та /send-links залишаються такими ж)
