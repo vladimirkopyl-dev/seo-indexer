@@ -34,23 +34,21 @@ async def home():
 
 @app.get("/buy")
 async def create_checkout():
-    # Створення сесії оплати
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
                 'price_data': {
                     'currency': 'usd',
-                    'product_data': {'name': 'SEO Indexer Monthly Subscription'},
-                    'unit_amount': 1000, # Сума в центах ($10.00)
+                    'product_data': {'name': 'SEO Indexer - 1 Month Access'},
+                    'unit_amount': 1000, # $10.00
                 },
                 'quantity': 1,
             }],
-            mode='subscription',
-            success_url='https://google.com', # Повернення після успішної оплати
-            cancel_url='https://google.com',  # Повернення при скасуванні
+            mode='payment', # Змінено з 'subscription' на 'payment'
+            success_url='https://google.com',
+            cancel_url='https://google.com',
         )
-        # Пряме перенаправлення на Stripe
         return RedirectResponse(url=session.url, status_code=303)
     except Exception as e:
         return {"error": str(e)}
