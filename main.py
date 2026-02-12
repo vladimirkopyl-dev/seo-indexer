@@ -5,10 +5,9 @@ import os
 
 app = FastAPI()
 
-# Переконайтеся, що в налаштуваннях Railway додано змінну STRIPE_SECRET_KEY
+# Ключ Stripe
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-# Спільні стилі для всього додатка
 HEAD_CONTENT = """
 <head>
     <title>SEO Turbo Indexer | Fast Google Indexing</title>
@@ -19,15 +18,13 @@ HEAD_CONTENT = """
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .plan-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
         details > summary { list-style: none; cursor: pointer; }
-        details > summary::-webkit-details-marker { display: none; }
     </style>
 </head>
 """
 
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    # Списки переваг та FAQ
-    features_list = [
+    features = [
         ("HANDY & SIMPLE", "fas fa-user-check", "A user-friendly platform designed to make the process straightforward."),
         ("BUILT-IN CHECKER", "fas fa-search", "Instantly verify index status without third-party tools."),
         ("80% EFFICIENCY", "fas fa-bolt", "Success rate within just 72 hours of submission."),
@@ -36,10 +33,16 @@ async def home():
         ("SIMPLE API", "fas fa-code", "Integrate indexing into your workflow with our API.")
     ]
     
-    faq_list = [
-        ("What is a URL and what can be indexed?", "A URL must start with http:// or https://. You can index blog posts, backlinks, and profiles."),
-        ("How long does indexing take?", "Most pages (70%) are indexed within 24 hours. We monitor for up to 10 days."),
-        ("What happens if a URL is not indexed?", "Your credit is automatically returned to your balance after 10 days.")
-    ]
+    # Безпечне формування HTML через цикл
+    features_html = ""
+    for title, icon, desc in features:
+        features_html += f"""
+        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm text-center">
+            <div class="text-indigo-600 text-2xl mb-3"><i class="{icon}"></i></div>
+            <h4 class="font-bold text-slate-800 text-[10px] mb-2 uppercase tracking-tight">{title}</h4>
+            <p class="text-slate-500 text-[10px] leading-relaxed">{desc}</p>
+        </div>"""
 
-    features_html = "".join([f"""
+    faq = [
+        ("What is a URL?", "A URL must start with http:// or https://."),
+        ("How long it takes?", "Most pages are indexed within 24 hours."),
